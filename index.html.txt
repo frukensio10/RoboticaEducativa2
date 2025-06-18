@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Robótica Edu AR</title>
+  <style>
+    :root {
+      --primary: #007BFF;
+      --primary-dark: #0056b3;
+      --secondary: #28a745;
+      --accent: #ffc107;
+      --danger: #dc3545;
+      --bg-light: #f8f9fa;
+      --bg-dark: #343a40;
+      --text-dark: #212529;
+      --text-light: #f8f9fa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 100px 2rem 80px;
+      text-align: center;
+      scroll-margin-top: 80px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Features Grid */
+    .features {
+      padding: 4rem 2rem;
+      background: #fff;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-light);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    /* Sections */
+    section {
+      padding: 4rem 2rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: #666;
+    }
+
+    /* Activities */
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .activity-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .activity-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .activity-title {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .activity-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .bg-blue {
+      background: #e6f0ff;
+    }
+
+    .bg-green {
+      background: #e6ffe6;
+    }
+
+    .bg-purple {
+      background: #f2e6ff;
+    }
+
+    .btn-blue {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-green {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-purple {
+      background: #8000ff;
+      color: white;
+    }
+
+    /* Resources */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .resource-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .resource-img {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .resource-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .resource-content {
+      padding: 1.5rem;
+    }
+
+    .resource-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary);
+      text-decoration: none;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .resource-link svg {
+      margin-left: 0.25rem;
+    }
+
+    /* Contact */
+    .contact {
+      background: #f8f9fa;
+      padding: 4rem 2rem;
+      scroll-margin-top: 80px;
+    }
+
+    .contact-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.2);
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .submit-btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+    }
+
+    .success-message {
+      background: #d4edda;
+      border-left: 4px solid #155724;
+      padding: 1rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background: #212529;
+      color: #fff;
+      padding: 3rem 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-section p, 
+    .footer-section a {
+      color: #adb5bd;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      color: #adb5bd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #343a40;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .features-container,
+      .activities-grid,
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-container {
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="inicio">
+    <div class="nav-container">
+      <div class="nav-logo">Robótica Edu AR</div>
+      <ul class="nav-links">
+        <li><a href="#inicio" class="active">Inicio</a></li>
+        <li><a href="#actividades">Actividades</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Plataforma de Recursos para Robótica Educativa</h1>
+    <p>Herramientas y actividades para docentes argentinos que enseñan robótica a estudiantes de 12 a 18 años</p>
+    <div class="hero-buttons">
+      <a href="#actividades" class="btn btn-primary">Ver Actividades</a>
+      <a href="#recursos" class="btn btn-outline">Explorar Recursos</a>
+    </div>
+    
+    <div class="features-container" style="margin-top: 3rem;">
+      <div class="feature-card">
+        <div class="feature-icon">🧩</div>
+        <div class="feature-title">Proyectos Prácticos</div>
+        <p>Recursos educativos listos para implementar en el aula</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <div class="feature-title">Guías Didácticas</div>
+        <p>Material pedagógico estructurado por nivel educativo</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎥</div>
+        <div class="feature-title">Tutoriales Interactivos</div>
+        <p>Aprendizaje visual para facilitar la enseñanza</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities Section -->
+  <section id="actividades">
+    <div class="section-title">
+      <h2>Actividades por Nivel</h2>
+      <p>Recursos adaptados a diferentes etapas de aprendizaje en robótica educativa</p>
+    </div>
+    
+    <div class="activities-grid">
+      <div class="activity-card bg-blue">
+        <div class="activity-icon">👶</div>
+        <h3 class="activity-title">Básico</h3>
+        <p>Introducción a la programación con bloques visuales y kits como Makeblock mBot. Ideal para estudiantes que se inician en robótica.</p>
+        <a href="#" class="activity-btn btn-blue">Ver Recursos</a>
+      </div>
+      
+      <div class="activity-card bg-green">
+        <div class="activity-icon">⚙️</div>
+        <h3 class="activity-title">Intermedio</h3>
+        <p>Proyectos con sensores y motores usando Arduino y Lego Spike. Enfocado en desarrollo de habilidades técnicas.</p>
+        <a href="#" class="activity-btn btn-green">Ver Recursos</a>
+      </div>
+      
+      <div class="activity-card bg-purple">
+        <div class="activity-icon">🧠</div>
+        <h3 class="activity-title">Avanzado</h3>
+        <p>Desarrollo de robots autónomos con código C++ y placas programables. Para estudiantes con experiencia previa.</p>
+        <a href="#" class="activity-btn btn-purple">Ver Recursos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources Section -->
+  <section id="recursos">
+    <div class="section-title">
+      <h2>Kits Recomendados</h2>
+      <p>Equipamiento y herramientas para diferentes niveles de aprendizaje</p>
+    </div>
+    
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-img">
+          <img src="https://placehold.co/400x300/007BFF/FFFFFF?text=Lego+Mindstorms" alt="Lego Mindstorms">
+        </div>
+        <div class="resource-content">
+          <h3 class="resource-title">Lego Mindstorms</h3>
+          <p>Ideal para iniciarse en robótica con piezas modulares y programación intuitiva.</p>
+          <a href="#" class="resource-link">Más información <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> 
+            <path d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+          </svg></a>
+        </div>
+      </div>
+      
+      <div class="resource-card">
+        <div class="resource-img">
+          <img src="https://placehold.co/400x300/28A745/FFFFFF?text=Arduino+Kit" alt="Arduino">
+        </div>
+        <div class="resource-content">
+          <h3 class="resource-title">Arduino</h3>
+          <p>Componentes: Placas Arduino Uno, motores, sensores de luz/temperatura, y software Arduino IDE.</p>
+          <a href="#" class="resource-link">Más información <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> 
+            <path d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+          </svg></a>
+        </div>
+      </div>
+      
+      <div class="resource-card">
+        <div class="resource-img">
+          <img src="https://placehold.co/400x300/DC3545/FFFFFF?text=Makeblock+mBot" alt="Makeblock mBot">
+        </div>
+        <div class="resource-content">
+          <h3 class="resource-title">Makeblock mBot</h3>
+          <p>Robot educativo para principiantes con programación visual y componentes modulares.</p>
+          <a href="#" class="resource-link">Más información <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> 
+            <path d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+          </svg></a>
+        </div>
+      </div>
+      
+      <div class="resource-card">
+        <div class="resource-img">
+          <img src="https://placehold.co/400x300/FD7E14/FFFFFF?text=Lego+Spike" alt="Lego Spike">
+        </div>
+        <div class="resource-content">
+          <h3 class="resource-title">Lego Spike</h3>
+          <p>Combinación de hardware y software para proyectos STEM con enfoque en programación avanzada.</p>
+          <a href="#" class="resource-link">Más información <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> 
+            <path d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+          </svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contacto">
+    <div class="section-title">
+      <h2>Contáctanos</h2>
+      <p>¿Tienes dudas o necesitas más información? Escríbenos y te responderemos a la brevedad</p>
+    </div>
+    
+    <div class="contact-container">
+      <form id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" placeholder="Tu nombre completo">
+          <div class="error" id="nameError">El nombre es requerido</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tu@email.com">
+          <div class="error" id="emailError">Email válido requerido</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" rows="5" placeholder="Escribe tu consulta aquí..."></textarea>
+          <div class="error" id="messageError">El mensaje es requerido</div>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="submit-btn" id="submitButton">
+            Enviar Mensaje
+          </button>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+          <strong>¡Mensaje enviado!</strong> Pronto nos pondremos en contacto contigo.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div>
+          <div class="nav-logo" style="margin-bottom: 1rem;">Robótica Edu AR</div>
+          <p>Plataforma de recursos educativos para docentes argentinos que enseñan robótica a estudiantes de 12 a 18 años.</p>
+          <div class="social-icons">
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.628H4.203v-2.324h2.547V9.39c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.868h2.773l-.443 2.89h-2.33v6.988C13.059 15.392 16 12.062 16 8.05c-.001-4.016-3.583-7.001-7.998-7.001C3.58 1 0 4.602 0 8.05c0 3.062 2.235 5.68 5.32 6.194A2.615 2.615 0 0 0 5.32 14c0 .22-.007.481-.02 1.008H0v2.324h10.953v-2.047M8.309 20c-1.008 0-1.805-.806-1.805-1.807 0-.999.8-1.807 1.805-1.807 1.009 0 1.806.808 1.806 1.807 0 1.001-.8 1.807-1.806 1.807zm6.565 2.806c-.806 0-1.46-.66-1.46-1.46s.654-1.46 1.46-1.46 1.46.66 1.46 1.46-.654 1.46-1.46 1.46z"/>
+          </svg></a>
+          <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.53 2.306 6.588 5.47 7.615 0.4.074 0.547-0.17 0.547-0.384 0-0.19-0.007-0.696-0.01-1.36 2.21-.482 4.565-1.276 4.565-5.702 0-1.276-0.457-2.324-1.207-3.21 0 0-0.986-0.308-3.298 1.236-0.96-.26-1.96-.39-2.96-.39-1 0-2.04 0.13-2.98 0.39C0.72 2.84 0.23 3.884 0.23 5.184 0 2.48 1.517 3.014 2.92 3.21-.26.63-.4.145-.4.92-.4 1.031.08 2.06.305 2.86 2.15 2.48 5.67 2.7 8.14 2.7 0.401 0.065 0.72 0.065 1.081 0.065 0.192 0 0.43-0.021 0.636-0.057C12.7 14.29 14 12.149 14 9.72c0-2.48-1.52-4.48-3.56-5.03 0.277-0.76 1.02-1.48 1.02-1.48S12.337 2.4 11.925 1.25 9.86 0.63 7.994 0.63c-1.86 0-3.72 0.63-5.56 1.817C1.178 3.69 0 6.01 0 8.5c0 2.48 1.52 4.48 3.56 5.03-.277 0.76-1.02 1.48-1.02 1.48S0.663 15.6 1.075 16.75c1.178 0.37 2.437 0.57 3.68 0.57h0.01c1.178 0 2.437-0.19 3.68-0.57 1.178-0.37 2.21-0.86 3.09-1.53 0.917-0.7 1.56-1.78 1.56-2.98 0-1.86-1.52-3.38-3.56-3.92 0.277-0.76 1.02-1.48 1.02-1.48S14.337 4.4 14.75 3.25z"/>
+          </svg></a>
+          <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M15.868 8.716c-0.03-0.248-0.242-0.414-0.504-0.464a5.5 5.5 0 0 0-7.744 0 0.262 0.05 0.474 0.216 0.504 0.464 0.07 0.54 0.266 1.014 0.59 1.395a5.5 5.5 0 0 0 7.744 0 2.8 2.8 0 0 0 0.59-1.395zM8 13.982a5.013 5.013 0 0 1-.965-.091l-.178.91A5.5 5.5 0 0 1 5.825 13c0-1.017.377-2.088 1.076-2.936a4.9 4.9 0 0 1-.089-1.102C6.398 7.389 5.125 5.992 3.32 5.992 2.44 5.992 1.65 6.53 1.287 7.247l-.042-.448 2.654-2.654a.503.503 0 0 1 .95.417l-2.654 10.104A.5.5 0 0 1 1.994 12.8a.5.5 0 0 1-.122-.592l.41-1.592-2.294 2.294a1 1 0 0 0 .246 1.708l1.486 1.269a1 1 0 0 0 1.32-.206l4.115-5.013 2.294 2.294a1 1 0 0 0 1.496 0l6.104-6.104a2.5 2.5 0 0 0-3.46-3.48L13.92 3.5l-.36.03A5.373 5.373 0 0 1 7.593 7.36 2.81 2.81 0 0 0-.415 2.325c.832.22.163 1.036.163 1.036Z"/>
+          </svg></a>
+        </div>
+      </div>
+      
+      <div>
+        <h3>Recursos</h3>
+        <a href="#">Guías Didácticas</a>
+        <a href="#">Tutoriales</a>
+        <a href="#">Documentación Técnica</a>
+        <a href="#">Comunidad Educativa</a>
+      </div>
+      
+      <div>
+        <h3>Soporte</h3>
+        <a href="#">Preguntas Frecuentes</a>
+        <a href="#">Guía de Instalación</a>
+        <a href="#">Documentación</a>
+        <a href="#">Centro de Ayuda</a>
+      </div>
+      
+      <div>
+        <h3>Boletín Informativo</h3>
+        <p>Suscríbete para recibir novedades</p>
+        <form>
+          <input type="email" placeholder="Tu correo electrónico" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;">
+          <button type="submit" style="width: 100%; padding: 0.5rem; background: var(--primary); color: white; border: none; border-radius: 5px;">Suscribirse</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Robótica Educativa AR. Todos los derechos reservados.</p>
+      <p>Desarrollado por tu_nombre | Buenos Aires, Argentina</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Scroll Spy Navigation
+    const sections = ['inicio', 'actividades', 'recursos', 'contacto'];
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 100;
+      
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        const navLink = document.querySelector(`a[href="#${section}"]`);
+        
+        if (element && navLink) {
+          if (element.offsetTop <= scrollPos && (element.offsetTop + element.offsetHeight) > scrollPos) {
+            navLinks.forEach(link => link.classList.remove('active'));
+            navLink.classList.add('active');
+          }
+        }
+      });
+    });
+
+    // Form Validation
+    const contactForm = document.getElementById('contactForm');
+    const formElements = {
+      name: document.getElementById('name'),
+      email: document.getElementById('email'),
+      message: document.getElementById('message')
+    };
+    const errorMessages = {
+      name: document.getElementById('nameError'),
+      email: document.getElementById('emailError'),
+      message: document.getElementById('messageError')
+    };
+    const submitButton = document.getElementById('submitButton');
+    const successMessage = document.getElementById('successMessage');
+
+    function validateForm() {
+      let isValid = true;
+      
+      // Reset errors
+      Object.values(errorMessages).forEach(error => error.style.display = 'none');
+      
+      // Validate fields
+      if (!formElements.name.value.trim()) {
+        errorMessages.name.style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!/^\S+@\S+\.\S+/.test(formElements.email.value)) {
+        errorMessages.email.style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!formElements.message.value.trim()) {
+        errorMessages.message.style.display = 'block';
+        isValid = false;
+      }
+      
+      return isValid;
+    }
+
+    function showSuccessMessage() {
+      successMessage.style.display = 'block';
+      contactForm.reset();
+      
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (validateForm()) {
+        // Simular envío
+        submitButton.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v-1a9 9 0 00-9 9h1z"></path>
+          </svg>
+          Enviando...
+        `;
+        submitButton.disabled = true;
+        
+        // Simular tiempo de envío
+        setTimeout(() => {
+          submitButton.innerHTML = "Enviar Mensaje";
+          submitButton.disabled = false;
+          showSuccessMessage();
+        }, 1500);
+      }
+    });
+
+    // Añade active class a navegación
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
